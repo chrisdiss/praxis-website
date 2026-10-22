@@ -1,57 +1,58 @@
 /* Osteopathie Emmert – Interaktionen
-   Beschwerde-Auswahl, Akkordeons (Behandlung, Expertise) und mobiles Menü.
+   Beschwerde-Auswahl (Kacheln und Chips), Akkordeons (Behandlung, Werdegang,
+   Fragen) und mobiles Menü.
    Ohne JavaScript bleibt der gesamte Inhalt erreichbar. */
 
 (function () {
   'use strict';
 
   var WAYS = {
-    parietal: { title: 'Parietal', sub: 'Muskeln, Gelenke, Wirbelsäule' },
-    faszial: { title: 'Faszial', sub: 'Das verbindende Gewebe' },
-    viszeral: { title: 'Viszeral', sub: 'Die inneren Organe' },
-    cranio: { title: 'Craniosacral', sub: 'Schädel, Wirbelsäule, Kreuzbein' }
+    parietal: { title: 'Parietal', sub: 'Muskeln, Gelenke, Bänder, Wirbelsäule' },
+    faszial: { title: 'Faszial', sub: 'Das Bindegewebe, das alles umhüllt' },
+    viszeral: { title: 'Viszeral', sub: 'Organe in Brust, Bauch und Becken' },
+    cranio: { title: 'Craniosacral', sub: 'Schädel, Wirbelsäule und Kreuzbein' }
   };
 
   var COMPLAINTS = {
     ruecken: {
-      label: 'Rücken & Nacken', ways: ['parietal', 'faszial', 'viszeral'],
-      feel: 'Verspannungen, die immer wiederkommen. Schmerzen beim Sitzen, beim Bücken oder morgens nach dem Aufstehen.',
-      why: 'Der Schmerz sitzt oft nicht dort, wo er entsteht. Eine Fehlhaltung im Becken, eine alte Verletzung am Fuß oder Spannungen im Bauchraum können sich über Muskel- und Faszienketten bis in den Rücken fortsetzen.'
+      label: 'Rücken und Nacken', ways: ['parietal', 'faszial', 'viszeral'],
+      feel: 'Die Verspannung kommt immer wieder. Morgens beim Aufstehen, nach langem Sitzen, beim Bücken.',
+      why: 'Der Schmerz sitzt oft nicht dort, wo er entsteht. Eine Fehlhaltung im Becken, eine alte Verletzung am Fuß oder Spannung im Bauchraum kann sich über Muskel- und Faszienketten bis in den Rücken fortsetzen.'
     },
     kopf: {
-      label: 'Kopfschmerz & Migräne', ways: ['cranio', 'parietal'],
-      feel: 'Druck im Kopf, Schmerzen, die vom Nacken aufsteigen, Attacken, die den Alltag bestimmen.',
-      why: 'Spannungen in Nacken, Kiefer und an den Schädelknochen können Kopfschmerzen begünstigen. Ich prüfe, wie frei sich Halswirbelsäule, Kiefer und Schädel bewegen.'
+      label: 'Kopfschmerzen und Migräne', ways: ['cranio', 'parietal'],
+      feel: 'Druck im Kopf, Schmerzen, die aus dem Nacken hochziehen, Attacken, nach denen Sie den Tag planen.',
+      why: 'Spannung in Nacken, Kiefer und an den Schädelknochen kann Kopfschmerzen begünstigen. Ich prüfe, wie frei sich Halswirbelsäule, Kiefer und Schädel bewegen.'
     },
     schwindel: {
-      label: 'Schwindel & Tinnitus', ways: ['cranio', 'parietal'],
-      feel: 'Ohrgeräusche, Unsicherheit beim Gehen, ein Gefühl von Benommenheit.',
-      why: 'Halswirbelsäule, Kiefergelenk und die Strukturen rund ums Ohr hängen eng zusammen. Spannungen dort können eine Rolle spielen.'
+      label: 'Schwindel und Tinnitus', ways: ['cranio', 'parietal'],
+      feel: 'Ein Rauschen oder Pfeifen im Ohr. Unsicherheit beim Gehen. Ein Gefühl, als wäre der Kopf in Watte.',
+      why: 'Halswirbelsäule, Kiefergelenk und die Strukturen rund ums Ohr hängen eng zusammen. Spannung dort kann eine Rolle spielen.'
     },
     bauch: {
-      label: 'Verdauung & Bauch', ways: ['viszeral', 'faszial'],
-      feel: 'Blähungen, Sodbrennen, Völlegefühl – oft ohne klaren Befund.',
-      why: 'Organe brauchen Beweglichkeit. Spannungen oder Verklebungen im Bauchraum können ihre Funktion stören – und sogar Rückenschmerzen auslösen.'
+      label: 'Verdauung und Bauch', ways: ['viszeral', 'faszial'],
+      feel: 'Blähungen, Sodbrennen, Völlegefühl. Beim Arzt war alles unauffällig.',
+      why: 'Organe brauchen Beweglichkeit. Spannung oder Verklebungen im Bauchraum können ihre Funktion stören und sogar Rückenschmerzen auslösen.'
     },
     op: {
-      label: 'Nach Operationen', ways: ['viszeral', 'faszial'],
-      feel: 'Ziehen an der Narbe, eingeschränkte Beweglichkeit, Beschwerden, die erst nach dem Eingriff kamen.',
-      why: 'Narben und Verwachsungen verbinden Gewebe, das eigentlich frei gleiten sollte. Das kann Zug auf umliegende Strukturen ausüben.'
+      label: 'Nach einer Operation', ways: ['viszeral', 'faszial'],
+      feel: 'Die Narbe zieht, Sie bewegen sich vorsichtiger als vorher, und manches tut erst seit dem Eingriff weh.',
+      why: 'Narben und Verwachsungen verbinden Gewebe, das eigentlich frei gleiten sollte. Das kann an umliegenden Strukturen ziehen.'
     },
     chronisch: {
-      label: 'Chronische Schmerzen', ways: ['faszial', 'parietal'],
-      feel: 'Schmerzen, die wandern oder seit Monaten bleiben – und für die es keine eindeutige Erklärung gibt.',
-      why: 'Faszien verbinden den ganzen Körper. Wenn sich Spannungen darin festsetzen, können sie Schmerzen an ganz anderer Stelle unterhalten.'
+      label: 'Schmerzen, die bleiben', ways: ['faszial', 'parietal'],
+      feel: 'Es tut seit Monaten weh, mal hier, mal dort, und niemand findet eine klare Erklärung.',
+      why: 'Faszien verbinden den ganzen Körper. Setzt sich darin Spannung fest, kann sie Schmerzen an ganz anderer Stelle unterhalten.'
     },
     gelenke: {
-      label: 'Gelenke & Sport', ways: ['parietal', 'faszial'],
-      feel: 'Knie, Schulter oder Ellenbogen machen nicht mehr mit, eine Verletzung heilt nicht richtig aus.',
-      why: 'Ein Gelenk arbeitet nie allein. Ich schaue, welche Belastungen über die Bewegungskette darauf einwirken.'
+      label: 'Gelenke und Sport', ways: ['parietal', 'faszial'],
+      feel: 'Knie, Schulter oder Ellenbogen machen nicht mehr mit. Eine Verletzung heilt nicht richtig aus.',
+      why: 'Ein Gelenk arbeitet nie allein. Ich schaue, welche Belastungen über die Bewegungskette darauf wirken.'
     },
     stress: {
-      label: 'Stress & Anspannung', ways: ['cranio', 'viszeral'],
-      feel: 'Innere Unruhe, flacher Atem, ein Körper, der nicht mehr abschalten kann.',
-      why: 'Dauerstress zeigt sich im Körper – in Zwerchfell, Nacken und Verdauung. Sanfte Techniken können das vegetative Nervensystem beim Herunterfahren unterstützen.'
+      label: 'Stress und Anspannung', ways: ['cranio', 'viszeral'],
+      feel: 'Innere Unruhe, flacher Atem, ein Körper, der abends nicht abschaltet.',
+      why: 'Dauerstress zeigt sich im Körper, im Zwerchfell, im Nacken, in der Verdauung. Sanfte Techniken können das vegetative Nervensystem beim Herunterfahren unterstützen.'
     }
   };
 
@@ -127,10 +128,14 @@
     });
   });
 
-  // „So setze ich an“-Links öffnen den passenden Behandlungsweg
   document.addEventListener('click', function (event) {
-    var link = event.target.closest('[data-open-way]');
-    if (link) openWay(link.getAttribute('data-open-way'));
+    // „So setze ich an“-Links öffnen den passenden Behandlungsweg
+    var wayLink = event.target.closest('[data-open-way]');
+    if (wayLink) openWay(wayLink.getAttribute('data-open-way'));
+
+    // Kacheln „Womit kann ich Ihnen helfen?“ wählen die Beschwerde vor
+    var tile = event.target.closest('[data-complaint-link]');
+    if (tile) selectComplaint(tile.getAttribute('data-complaint-link'));
   });
 
   // Direkter Aufruf mit Anker, z. B. index.html#weg-faszial
